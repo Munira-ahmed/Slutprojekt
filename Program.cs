@@ -70,9 +70,9 @@ namespace Slutprojekt
         static void SparaDagligTodo()
         {
             int svar = 0, planNr = 0;
-            string[] delar;
+            //string[] delar;
             string plan = "";
-
+            int antalPlaner = 20;
             //Berätta om programmet
             Console.WriteLine("<Spara dina dagliga planer.");
             Console.WriteLine("Endast 20 planer i taget. ");
@@ -83,16 +83,15 @@ namespace Slutprojekt
             {
                 // Läs in alla rader
                 DagligaTodos = File.ReadAllLines(Filnamn1);
-                Console.WriteLine("planerna lästes in från fil");
             }
             else
             {
                 // Skapa en tom Todolista i arrayen
                 // Lagra detta i filen
-                DagligaTodos = new string[20];
+                DagligaTodos = new string[antalPlaner];
 
                 // Fyll arrayen med tomma platser
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < antalPlaner; i++)
                 {
                     DagligaTodos[i] = TomTodoLista;
                 }
@@ -119,12 +118,9 @@ namespace Slutprojekt
             Console.WriteLine("Ange en plan");
             plan = Console.ReadLine();
 
-            //Kolla upp max
-            delar = DagligaTodos[planNr - 1].Split(',');
-            plan = delar[0];
-            //daturm
-            string dateNow = DateTime.Now.ToString("dddd, dd MMMM yyyy");
-            dateNow = delar[1];
+            //datum
+            string dateNow = DateTime.Now.ToString("dddd, dd MMMM h:mm");
+           // dateNow = delar[1];
 
             // Spara i arrayen
             DagligaTodos[planNr - 1] = $"{plan},{dateNow}";
