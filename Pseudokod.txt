@@ -1,0 +1,60 @@
+using System;
+using System.IO;
+
+namespace Slutprojekt
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // presentera programet
+
+            //While loop !=4
+            //skriv ut en meny med VisaMeny()
+
+            //Läs in menyVal
+
+            //switch
+            case "1":
+                //SparaDagligTodo();
+                  break;
+            case "2":
+                //SparaViktigTodo();
+                  break;
+            case "3":
+                //VisaTodo();
+                  break;
+            case "4":
+                  break;
+        }
+        //VisaMeny(){
+            //1.dagliga planer
+            //2.viktiga planer
+            //3.Visa menyn
+            //4.Avsluta
+        }
+
+        //SparaDagligTodo(){
+            
+            //skapa en fil i fall den inte redan finns
+            //använd if-else & File.Exists (fil1)
+            //Be användaren om input 
+            //spara fil
+        }
+
+        //SparaViktigTodo(){
+            
+        }
+
+        // VisaTodo(){
+            //Läs in innehåll från fil1. använd array fil1Innehåll
+            
+            //skriv ut innehållet
+            //Läs in innehåll från fil2. använd array fil2Innehåll
+            //skriv ut innehållet
+
+        }
+        //TaBortTodo()
+
+    }
+}
