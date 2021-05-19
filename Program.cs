@@ -6,7 +6,7 @@ namespace Slutprojekt
     {
 
         // Den ska fylla i alla tomma platser i Todo-Listan
-        static string TomTodoLista = "plan, datum";
+        static string TomTodoLista = "plan, datum, deadline, klar"; //lägg till , KLAR senare efter jag har fixat deadline
 
         // Filen för att lagra dagliga planer
         static string Filnamn1 = "dagligFil.csv";
@@ -20,7 +20,6 @@ namespace Slutprojekt
 
             //program för en TODO-List
             Console.WriteLine("Detta är en Todo-Lista");
-            // DateTime dateNow = DateTime.Now; Visar tiden just nu
 
             // Console.WriteLine(dateNow);
             //Meny
@@ -36,8 +35,7 @@ namespace Slutprojekt
                         SparaDagligTodo(); //Lägg till Deadline istället för datum
                         break;
                     case "2":
-                        //Lägg till när en TOdo är klar 
-                        //  SparaViktigTodo();
+                        AvklaradeTodos();
                         break;
                     case "3":
                         VisaTodo();
@@ -59,8 +57,8 @@ namespace Slutprojekt
         static void VisaMeny()
         {
             Console.WriteLine("Välj ett alternativ");
-            Console.WriteLine("1. Dagliga planer");
-            Console.WriteLine("2. Viktiga planer");
+            Console.WriteLine("1. Spara planer");
+            Console.WriteLine("2. Markera avklarade planer");
             Console.WriteLine("3. Visa planer");
             Console.WriteLine("4. Ta bort planer");
             Console.WriteLine("5. Avsluta");
@@ -71,7 +69,7 @@ namespace Slutprojekt
         /// </summary>
         static void SparaDagligTodo()
         {
-            int svar = 0, planNr = 0;
+            int svar = 0, planNr = 0, deadline = 0;
             //string[] delar;
             string plan = "";
             int antalPlaner = 20;
@@ -121,18 +119,66 @@ namespace Slutprojekt
             plan = Console.ReadLine();
 
             //datum
-            string datum = DateTime.Now.ToString("dddd, dd MMMM h:mm");
+            string datum = DateTime.Now.ToString("dd MMMM h:mm");
             // dateNow = delar[1];
 
+            //Fråga om deadline (vecka 1-52)
+            Console.WriteLine("Ange veckan du ska vara klar (v.1 - v.52)");
+            while (!int.TryParse(Console.ReadLine(), out svar) || svar < 1 || svar > 53)
+            {
+                Console.WriteLine("Icke giltigt, vg försök igen");
+            }
+            deadline = svar;
+
             // Spara i arrayen
-            DagligaTodos[planNr - 1] = $"{plan},{datum}";
+            DagligaTodos[planNr - 1] = $"{plan},{datum},{deadline}";
 
             // Lagra i filen
             File.WriteAllLines(Filnamn1, DagligaTodos);
             Console.WriteLine("Dina planer sparades");
         }
-        //x()
-        
+        //AvklaradeTodos
+        static void AvklaradeTodos()
+        {
+
+            if (File.Exists(Filnamn1))
+            {
+                // Läs in alla rader
+                DagligaTodos = File.ReadAllLines(Filnamn1);
+                int planNr = 0, svar = 0;
+                // Fråga planNr
+                Console.WriteLine("Vilken plan från 1-20 är du klar med?");
+                while (!int.TryParse(Console.ReadLine(), out svar) || svar < 1 || svar > 21)
+                {
+                    Console.WriteLine("Icke giltigt, vg försök igen");
+                }
+                planNr = svar;
+
+
+                string[] delar = DagligaTodos[planNr - 1].Split(',');
+                string plan = delar[0];
+                string datum = delar[1];
+                string deadline = delar[2];
+
+                delar[3] = "✔️";
+
+                // Spara i arrayen
+                DagligaTodos[planNr - 1] = $"{plan},{datum},{deadline},{delar[3]}";
+
+                // Lagra i filen
+                File.WriteAllLines(Filnamn1, DagligaTodos);
+                Console.WriteLine("Dina planer sparades");
+            }
+            else
+            {
+                // be användaren lägga till planer först
+                Console.WriteLine("Fil med planer saknas, en ny fil med planer skapas via <Spara planer>");
+            }
+
+
+
+        }
+
         //VisaTodo()
         /// <summary>
         /// Metoden visar planerna i filen
@@ -161,7 +207,8 @@ namespace Slutprojekt
                 // Lagra i filen
                 File.WriteAllLines(Filnamn1, DagligaTodos);
                 Console.WriteLine("Fil med planer saknas, en ny fil skapades");
-            }for (int i = 0; i < antalPlaner; i++)
+            }
+            for (int i = 0; i < antalPlaner; i++)
             {
                 if (DagligaTodos[i] == TomTodoLista)
                 {
@@ -170,12 +217,13 @@ namespace Slutprojekt
                 }
                 else
                 {
-                 // Plocka ut plan och datum
+                    // Plocka ut plan och datum
                     string[] delar = DagligaTodos[i].Split(',');
                     string plan = delar[0];
                     string datum = delar[1];
+                    string deadline = delar[2];
 
-                    Console.WriteLine($" {i + 1} - Plan: {plan}, Datum: {datum}");
+                    Console.WriteLine($" {i + 1} - Plan: {plan}, Ändrad: {datum}, Deadline: {deadline}");
                 }
             }
         }
