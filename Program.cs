@@ -4,9 +4,12 @@ namespace Slutprojekt
 {
     class Program
     {
+        static string menyVal = "";
 
         // Den ska fylla i alla tomma platser i Todo-Listan
-        static string TomTodoLista = "plan, datum, deadline, klar"; //lägg till , KLAR senare efter jag har fixat deadline
+        static string TomTodoLista = "plan, datum, deadline, klar";
+
+
 
         // Filen för att lagra dagliga planer
         static string Filnamn1 = "dagligFil.csv";
@@ -21,18 +24,19 @@ namespace Slutprojekt
             //program för en TODO-List
             Console.WriteLine("Detta är en Todo-Lista");
 
-            // Console.WriteLine(dateNow);
+
             //Meny
-            string menyVal = "";
+
+            //string menyVal = "";
             while (menyVal != "5")
             {
-                VisaMeny();
-                menyVal = Console.ReadLine();
+                VisaMeny(menyVal);
+
                 //switch
                 switch (menyVal)
                 {
                     case "1":
-                        SparaDagligTodo(); //Lägg till Deadline istället för datum
+                        SparaDagligTodo();
                         break;
                     case "2":
                         AvklaradeTodos();
@@ -54,7 +58,7 @@ namespace Slutprojekt
         /// <summary>
         /// Metoden ska visa menyn
         /// </summary>
-        static void VisaMeny()
+        static string VisaMeny(string text)
         {
             Console.WriteLine("Välj ett alternativ");
             Console.WriteLine("1. Spara planer");
@@ -62,6 +66,8 @@ namespace Slutprojekt
             Console.WriteLine("3. Visa planer");
             Console.WriteLine("4. Ta bort planer");
             Console.WriteLine("5. Avsluta");
+            menyVal = Console.ReadLine();
+            return menyVal;
         }
         //SparaDagligTodo()
         /// <summary>
@@ -118,6 +124,8 @@ namespace Slutprojekt
             Console.WriteLine("Ange en plan");
             plan = Console.ReadLine();
 
+            //Lägg till avklarad-status
+            string avklarad = "inte klar";
             //datum
             string datum = DateTime.Now.ToString("dd MMMM h:mm");
             // dateNow = delar[1];
@@ -131,7 +139,7 @@ namespace Slutprojekt
             deadline = svar;
 
             // Spara i arrayen
-            DagligaTodos[planNr - 1] = $"{plan},{datum},{deadline}";
+            DagligaTodos[planNr - 1] = $"{plan},{datum},{deadline},{avklarad}";
 
             // Lagra i filen
             File.WriteAllLines(Filnamn1, DagligaTodos);
@@ -159,11 +167,12 @@ namespace Slutprojekt
                 string plan = delar[0];
                 string datum = delar[1];
                 string deadline = delar[2];
+                string avklarad = "KLAR";
 
-                delar[3] = "✔️";
+
 
                 // Spara i arrayen
-                DagligaTodos[planNr - 1] = $"{plan},{datum},{deadline},{delar[3]}";
+                DagligaTodos[planNr - 1] = $"{plan},{datum},{deadline},{avklarad} ";
 
                 // Lagra i filen
                 File.WriteAllLines(Filnamn1, DagligaTodos);
@@ -210,6 +219,7 @@ namespace Slutprojekt
             }
             for (int i = 0; i < antalPlaner; i++)
             {
+
                 if (DagligaTodos[i] == TomTodoLista)
                 {
                     //  tomt
@@ -222,8 +232,15 @@ namespace Slutprojekt
                     string plan = delar[0];
                     string datum = delar[1];
                     string deadline = delar[2];
+                    string avklarad = delar[3];
 
-                    Console.WriteLine($" {i + 1} - Plan: {plan}, Ändrad: {datum}, Deadline: {deadline}");
+
+
+                    Console.WriteLine($" {i + 1} - Plan: {plan}, Ändrad: {datum}, Deadline: vecka {deadline}, status: {avklarad}");
+
+
+
+
                 }
             }
         }
