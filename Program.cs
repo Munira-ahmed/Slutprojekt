@@ -82,7 +82,7 @@ namespace Slutprojekt
             //Berätta om programmet
             Console.WriteLine("<Spara dina dagliga planer.");
             Console.WriteLine("Endast 20 planer i taget. ");
-            Console.WriteLine("Hantera med 'Visa planer' & 'Ta bort planer' i menyn.>");
+            Console.WriteLine("Hantera även med 'Visa planer' & 'Ta bort planer' i menyn.>");
 
             //Skapa filen om den inte redan finns
             if (File.Exists(Filnamn1))
@@ -167,7 +167,7 @@ namespace Slutprojekt
                 string plan = delar[0];
                 string datum = delar[1];
                 string deadline = delar[2];
-                string avklarad = "KLAR";
+                string avklarad = "✔️";
 
 
 
@@ -234,7 +234,7 @@ namespace Slutprojekt
                     string deadline = delar[2];
                     string avklarad = delar[3];
 
-
+                    Console.OutputEncoding = System.Text.Encoding.UTF8;
 
                     Console.WriteLine($" {i + 1} - Plan: {plan}, Ändrad: {datum}, Deadline: vecka {deadline}, status: {avklarad}");
 

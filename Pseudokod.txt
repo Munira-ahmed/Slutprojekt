@@ -9,7 +9,7 @@ namespace Slutprojekt
         {
             // presentera programet
 
-            //While loop !=4
+            //While loop !=5
             //skriv ut en meny med VisaMeny()
 
             //Läs in menyVal
@@ -19,12 +19,15 @@ namespace Slutprojekt
                 //SparaDagligTodo();
                   break;
             case "2":
-                //SparaViktigTodo();
+                //MarkeraAvklaradTodo();
                   break;
             case "3":
                 //VisaTodo();
                   break;
             case "4":
+            //TaBortTodo();
+            case "5":
+            //Avsluta
                   break;
         }
         //VisaMeny(){
@@ -32,6 +35,8 @@ namespace Slutprojekt
             //2.viktiga planer
             //3.Visa menyn
             //4.Avsluta
+
+            retur menyVal;
         }
 
         //SparaDagligTodo(){
@@ -42,7 +47,7 @@ namespace Slutprojekt
             //spara fil
         }
 
-        //SparaViktigTodo(){
+        //MarkeraAvklaradTodo(){
             
         }
 
@@ -54,7 +59,9 @@ namespace Slutprojekt
             //skriv ut innehållet
 
         }
-        //TaBortTodo()
+        //TaBortTodo(){
+            
+        }
 
     }
 }
