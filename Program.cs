@@ -4,39 +4,43 @@ namespace Slutprojekt
 {
     class Program
     {
-        static string menyVal = "";
+        static int antalPlaner = 20;
+
+        //static string MenyVal = "";
 
         // Den ska fylla i alla tomma platser i Todo-Listan
         static string TomTodoLista = "plan, datum, deadline, klar";
 
-
-
-        // Filen för att lagra dagliga planer
-        static string Filnamn1 = "dagligFil.csv";
+        // Filen för att lagra planer
+        static string Filnamn = "dagligFil.csv";
 
         //Array för innehållet i filnamn1
-        static string[] DagligaTodos;
+        static string[] Todos;
 
 
         static void Main(string[] args)
         {
 
-            //program för en TODO-List
+            //program för en TODO-List & Berätta om programmet
+            System.Console.WriteLine("---------------------------");
             Console.WriteLine("Detta är en Todo-Lista");
-
+            Console.WriteLine("<Spara dina planer.");
+            Console.WriteLine("Endast 20 planer i taget. >");
+            System.Console.WriteLine();
 
             //Meny
-
-            //string menyVal = "";
+      
+           string menyVal = "";
             while (menyVal != "5")
             {
-                VisaMeny(menyVal);
+                menyVal = VisaMeny();
+               // VisaMeny(menyVal);
 
                 //switch
                 switch (menyVal)
                 {
                     case "1":
-                        SparaDagligTodo();
+                        SparaTodos();
                         break;
                     case "2":
                         AvklaradeTodos();
@@ -53,64 +57,36 @@ namespace Slutprojekt
                     default:
                         break;
                 }
+
             }
         }
         /// <summary>
         /// Metoden ska visa menyn
         /// </summary>
-        static string VisaMeny(string text)
+        static string VisaMeny()
         {
-            Console.WriteLine("Välj ett alternativ");
+            string val = "";
+            System.Console.WriteLine("--------------------------");
+            Console.WriteLine("Välj ett alternativ (1-5) :");
             Console.WriteLine("1. Spara planer");
             Console.WriteLine("2. Markera avklarade planer");
             Console.WriteLine("3. Visa planer");
             Console.WriteLine("4. Ta bort planer");
             Console.WriteLine("5. Avsluta");
-            menyVal = Console.ReadLine();
-            return menyVal;
+            val = Console.ReadLine();
+            return val;
         }
-        //SparaDagligTodo()
+
+        //SparaTodos()
         /// <summary>
         /// Metoden skapar planer i en fil
         /// </summary>
-        static void SparaDagligTodo()
+        static void SparaTodos()
+
         {
             int svar = 0, planNr = 0, deadline = 0;
-            //string[] delar;
             string plan = "";
-            int antalPlaner = 20;
-            //Berätta om programmet
-            Console.WriteLine("<Spara dina dagliga planer.");
-            Console.WriteLine("Endast 20 planer i taget. ");
-            Console.WriteLine("Hantera även med 'Visa planer' & 'Ta bort planer' i menyn.>");
-
-            //Skapa filen om den inte redan finns
-            if (File.Exists(Filnamn1))
-            {
-                // Läs in alla rader
-                DagligaTodos = File.ReadAllLines(Filnamn1);
-            }
-            else
-            {
-                // Skapa en tom Todolista i arrayen
-                // Lagra detta i filen
-                DagligaTodos = new string[antalPlaner];
-
-                // Fyll arrayen med tomma platser
-                for (int i = 0; i < antalPlaner; i++)
-                {
-                    DagligaTodos[i] = TomTodoLista;
-                }
-
-                // Lagra i filen
-                File.WriteAllLines(Filnamn1, DagligaTodos);
-                Console.WriteLine("Fil med planer saknas, en ny fil skapades");
-            }
-            //Fråga användaren om en plan
-            Console.WriteLine();
-            // Ändra innehållet i DagligaTodos
-
-            //Spara det i filen
+            SkapaFil();
 
             // Fråga planNr
             Console.WriteLine("Vilken plan från 1-20 vill du ändra på/lägga till?");
@@ -125,10 +101,10 @@ namespace Slutprojekt
             plan = Console.ReadLine();
 
             //Lägg till avklarad-status
-            string avklarad = "inte klar";
+            string avklarad = "❌";
+
             //datum
             string datum = DateTime.Now.ToString("dd MMMM h:mm");
-            // dateNow = delar[1];
 
             //Fråga om deadline (vecka 1-52)
             Console.WriteLine("Ange veckan du ska vara klar (v.1 - v.52)");
@@ -139,20 +115,24 @@ namespace Slutprojekt
             deadline = svar;
 
             // Spara i arrayen
-            DagligaTodos[planNr - 1] = $"{plan},{datum},{deadline},{avklarad}";
+            Todos[planNr - 1] = $"{plan},{datum},{deadline},{avklarad}";
 
             // Lagra i filen
-            File.WriteAllLines(Filnamn1, DagligaTodos);
+            File.WriteAllLines(Filnamn, Todos);
             Console.WriteLine("Dina planer sparades");
         }
+
         //AvklaradeTodos
+        /// <summary>
+        /// Metoden lägger till en "Checkmark" på den valda planen
+        /// </summary>
         static void AvklaradeTodos()
         {
 
-            if (File.Exists(Filnamn1))
+            if (File.Exists(Filnamn))
             {
                 // Läs in alla rader
-                DagligaTodos = File.ReadAllLines(Filnamn1);
+                Todos = File.ReadAllLines(Filnamn);
                 int planNr = 0, svar = 0;
                 // Fråga planNr
                 Console.WriteLine("Vilken plan från 1-20 är du klar med?");
@@ -163,7 +143,7 @@ namespace Slutprojekt
                 planNr = svar;
 
 
-                string[] delar = DagligaTodos[planNr - 1].Split(',');
+                string[] delar = Todos[planNr - 1].Split(',');
                 string plan = delar[0];
                 string datum = delar[1];
                 string deadline = delar[2];
@@ -172,10 +152,10 @@ namespace Slutprojekt
 
 
                 // Spara i arrayen
-                DagligaTodos[planNr - 1] = $"{plan},{datum},{deadline},{avklarad} ";
+                Todos[planNr - 1] = $"{plan},{datum},{deadline},{avklarad} ";
 
                 // Lagra i filen
-                File.WriteAllLines(Filnamn1, DagligaTodos);
+                File.WriteAllLines(Filnamn, Todos);
                 Console.WriteLine("Dina planer sparades");
             }
             else
@@ -194,33 +174,11 @@ namespace Slutprojekt
         /// </summary>
         static void VisaTodo()
         {
-            int antalPlaner = 20;
-            //Skapa filen om den inte redan finns
-            if (File.Exists(Filnamn1))
-            {
-                // Läs in alla rader
-                DagligaTodos = File.ReadAllLines(Filnamn1);
-            }
-            else
-            {
-                // Skapa en tom Todolista i arrayen
-                // Lagra detta i filen
-                DagligaTodos = new string[antalPlaner];
-
-                // Fyll arrayen med tomma platser
-                for (int i = 0; i < antalPlaner; i++)
-                {
-                    DagligaTodos[i] = TomTodoLista;
-                }
-
-                // Lagra i filen
-                File.WriteAllLines(Filnamn1, DagligaTodos);
-                Console.WriteLine("Fil med planer saknas, en ny fil skapades");
-            }
+            SkapaFil();
             for (int i = 0; i < antalPlaner; i++)
             {
 
-                if (DagligaTodos[i] == TomTodoLista)
+                if (Todos[i] == TomTodoLista)
                 {
                     //  tomt
                     Console.WriteLine($"{i + 1} - Ingen plan");
@@ -228,7 +186,7 @@ namespace Slutprojekt
                 else
                 {
                     // Plocka ut plan och datum
-                    string[] delar = DagligaTodos[i].Split(',');
+                    string[] delar = Todos[i].Split(',');
                     string plan = delar[0];
                     string datum = delar[1];
                     string deadline = delar[2];
@@ -236,10 +194,7 @@ namespace Slutprojekt
 
                     Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-                    Console.WriteLine($" {i + 1} - Plan: {plan}, Ändrad: {datum}, Deadline: vecka {deadline}, status: {avklarad}");
-
-
-
+                    Console.WriteLine($" {i + 1} - Plan: {plan}, Ändrad: {datum}, Deadline: vecka {deadline}, avklarad: {avklarad}");
 
                 }
             }
@@ -252,30 +207,7 @@ namespace Slutprojekt
         static void TaBortTodo()
         {
             int svar = 0, planNr = 0;
-            int antalPlaner = 20;
-
-            //Skapa filen om den inte redan finns
-            if (File.Exists(Filnamn1))
-            {
-                // Läs in alla rader
-                DagligaTodos = File.ReadAllLines(Filnamn1);
-            }
-            else
-            {
-                // Skapa en tom Todolista i arrayen
-                // Lagra detta i filen
-                DagligaTodos = new string[antalPlaner];
-
-                // Fyll arrayen med tomma platser
-                for (int i = 0; i < antalPlaner; i++)
-                {
-                    DagligaTodos[i] = TomTodoLista;
-                }
-
-                // Lagra i filen
-                File.WriteAllLines(Filnamn1, DagligaTodos);
-                Console.WriteLine("Fil med planer saknas, en ny fil skapades");
-            }
+            SkapaFil();
 
             // Fråga planNr
             Console.WriteLine("Vilken plan från 1-20 vill du Ta bort?");
@@ -287,11 +219,39 @@ namespace Slutprojekt
 
 
             // Spara i arrayen
-            DagligaTodos[planNr - 1] = TomTodoLista;
+            Todos[planNr - 1] = TomTodoLista;
 
             // Lagra i filen
-            File.WriteAllLines(Filnamn1, DagligaTodos);
+            File.WriteAllLines(Filnamn, Todos);
             Console.WriteLine("Dina planer sparades");
+        }
+
+        static void SkapaFil()
+        {
+
+            //Skapa filen om den inte redan finns
+            if (File.Exists(Filnamn))
+            {
+                // Läs in alla rader
+                Todos = File.ReadAllLines(Filnamn);
+            }
+            else
+            {
+                // Skapa en tom Todolista i arrayen
+                // Lagra detta i filen
+                Todos = new string[antalPlaner];
+
+                // Fyll arrayen med tomma platser
+                for (int i = 0; i < antalPlaner; i++)
+                {
+                    Todos[i] = TomTodoLista;
+                }
+
+                // Lagra i filen
+                File.WriteAllLines(Filnamn, Todos);
+                Console.WriteLine("Fil med planer saknas, en ny fil skapades");
+            }
+
         }
 
     }
